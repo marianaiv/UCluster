@@ -158,6 +158,7 @@ def eval_one_epoch(sess,ops):
 
     y_assign = []
     y_glob =[]
+    y_dist=[]
     acc = 0
 
     for fn in range(len(EVALUATE_FILES)):
@@ -214,9 +215,11 @@ def eval_one_epoch(sess,ops):
                     y_val=batch_cluster
                 y_assign=cluster_assign
                 y_pool=np.squeeze(max_pool)
+                y_dist=dist
             else:
                 y_assign=np.concatenate((y_assign,cluster_assign),axis=0)
                 y_pool=np.concatenate((y_pool,np.squeeze(max_pool)),axis=0)
+                y_dist=np.concatenate((y_dist, dist))
             
                 if RD:
                     y_val=np.concatenate((y_val,batch_cluster),axis=0)
@@ -238,6 +241,7 @@ def eval_one_epoch(sess,ops):
         dset = fh5.create_dataset("max_pool", data=y_pool)
         dset = fh5.create_dataset("global", data=y_glob)
         dset = fh5.create_dataset("masses", data=y_mass)
+        dset = fh5.create_dataset("distances", data=y_dist)
 
         
 
