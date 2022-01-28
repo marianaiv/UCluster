@@ -224,7 +224,7 @@ def eval_one_epoch(sess,ops):
             else:
                 y_assign=np.concatenate((y_assign,cluster_assign),axis=0)
                 y_pool=np.concatenate((y_pool,np.squeeze(max_pool)),axis=0)
-                y_dist=np.concatenate((y_dist.T, y_dist))
+                y_dist=np.concatenate((dist.T, y_dist))
                 if RD:
                     y_val=np.concatenate((y_val,batch_cluster),axis=0)
                 
