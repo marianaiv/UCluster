@@ -199,6 +199,7 @@ def eval_one_epoch(sess,ops):
             dist,mu,max_pool = sess.run([ops['stack_dist'],ops['mu'],
                                          ops['max_pool']],feed_dict=feed_dict)
 
+
             cluster_assign = np.zeros((cur_batch_size), dtype=int)
             if RD:
                 batch_cluster = current_cluster[start_idx:end_idx]
@@ -215,11 +216,11 @@ def eval_one_epoch(sess,ops):
                     y_val=batch_cluster
                 y_assign=cluster_assign
                 y_pool=np.squeeze(max_pool)
-                y_dist=dist
+                y_dist=[dist]
             else:
                 y_assign=np.concatenate((y_assign,cluster_assign),axis=0)
                 y_pool=np.concatenate((y_pool,np.squeeze(max_pool)),axis=0)
-                y_dist=np.concatenate((y_dist, dist))
+                y_dist=np.concatenate(([y_dist], dist))
             
                 if RD:
                     y_val=np.concatenate((y_val,batch_cluster),axis=0)
