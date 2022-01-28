@@ -199,8 +199,8 @@ def eval_one_epoch(sess,ops):
             dist,mu,max_pool = sess.run([ops['stack_dist'],ops['mu'],
                                          ops['max_pool']],feed_dict=feed_dict)
 
-            print(type(dist))
-            print(dist.shape)
+            #print(type(dist))
+            #print(dist.shape)
 
             cluster_assign = np.zeros((cur_batch_size), dtype=int)
             if RD:
@@ -209,8 +209,8 @@ def eval_one_epoch(sess,ops):
 
             for i in range(cur_batch_size):
                 index_closest_cluster = np.argmin(dist[:, i])
-                print(dist[:, i].shape)
-                print(dist[:, i])
+                #print(dist[:, i].shape)
+                #print(dist[:, i])
                 cluster_assign[i] = index_closest_cluster
                 if RD:
                     acc+=cluster_acc(batch_cluster,cluster_assign)
@@ -220,11 +220,11 @@ def eval_one_epoch(sess,ops):
                     y_val=batch_cluster
                 y_assign=cluster_assign
                 y_pool=np.squeeze(max_pool)
-                y_dist=[dist]
+                y_dist=dist.T
             else:
                 y_assign=np.concatenate((y_assign,cluster_assign),axis=0)
                 y_pool=np.concatenate((y_pool,np.squeeze(max_pool)),axis=0)
-                y_dist=np.concatenate(([y_dist], dist))
+                y_dist=np.concatenate((y_dist.T, y_dist))
                 if RD:
                     y_val=np.concatenate((y_val,batch_cluster),axis=0)
                 
