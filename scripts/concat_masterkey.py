@@ -5,11 +5,11 @@ import pandas as pd
 from benchtools.src.datatools import ascii_column
 
 parser = argparse.ArgumentParser()
-parser.add_option("--boxn", type=int, default=1, help="Number of the black box to parse [default: 1]")
-parser.add_argument('--dir', type="string", default="../../", help='Path of h5 files')
-parser.add_option("--out", type="string", default="../h5/", help="Folder to save output files")
+parser.add_argument("--boxn", type=int, default=1, help="Number of the black box to parse [default: 1]")
+parser.add_argument('--dir', type=str, default="../../", help='Path of h5 files')
+parser.add_argument("--out", type=str, default="../h5/", help="Folder to save output files")
 
-(flags, args) = parser.parse_args()
+flags = parser.parse_args()
 
 samples_path = flags.dir
 bb = flags.boxn
