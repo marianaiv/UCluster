@@ -28,6 +28,7 @@ dataset_size = flags.datasize
 
 # doing it with a loop
 while start is not dataset_size:
+    print(start)
     # Reading the files for the data and the labels
     df_bb = pd.read_hdf(os.path.join(samples_path,sample), start=start, stop=start+chunksize)
     df_key = ascii_column(os.path.join(samples_path,key))
