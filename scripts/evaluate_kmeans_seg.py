@@ -216,6 +216,7 @@ def eval_one_epoch(sess,ops):
             if len(y_assign)==0:                
                 if RD or BBk:
                     y_val=batch_cluster
+                    print(type(dist), dist.shape)
                     y_dist=dist[:, i]
                 y_assign=cluster_assign
                 y_pool=np.squeeze(max_pool)
