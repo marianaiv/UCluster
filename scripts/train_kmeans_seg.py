@@ -127,7 +127,7 @@ def get_bn_decay(batch):
 
 def train():
     with tf.Graph().as_default():
-        with tf.device('/gpu:'+str(GPU_INDEX)):
+        with tf.device('/cpu:'+str(GPU_INDEX)):
             pointclouds_pl,  labels_pl, global_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT,NUM_FEAT,NUM_GLOB) 
 
             is_training_pl = tf.placeholder(tf.bool, shape=())
@@ -172,7 +172,7 @@ def train():
         
         # Create a session
         config = tf.ConfigProto()
-        config.gpu_options.allow_growth = True
+        #config.gpu_options.allow_growth = True
         config.allow_soft_placement = True
         config.log_device_placement = False
         sess = tf.Session(config=config)

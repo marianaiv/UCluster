@@ -34,7 +34,6 @@ while start != dataset_size:
     print(start)
     # Reading the files for the data
     df_bb = pd.read_hdf(os.path.join(samples_path,sample), start=start, stop=start+chunksize)
-    
     # Joining the df's
     bb_with_key = df_bb.assign(label=pd.Series(df_key.iloc[start:start+chunksize,0]).values)
     bb_with_key.rename(columns={'label': 2100}, inplace=True)
