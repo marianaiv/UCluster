@@ -33,7 +33,7 @@ while start is not dataset_size:
     df_key = ascii_column(os.path.join(samples_path,key))
 
     # Joining the df's
-    bb_with_key = df_bb.assign(label=pd.Series(df_key.iloc[:,0]).values)
+    bb_with_key = df_bb.assign(label=pd.Series(df_key.iloc[start:start+chunksize,0]).values)
     bb_with_key.rename(columns={'label': 2100}, inplace=True)
 
     # Saving as h5
