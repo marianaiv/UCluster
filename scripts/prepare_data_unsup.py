@@ -155,6 +155,7 @@ if __name__=='__main__':
     parser.add_option("--njets", type=int, default=2, help="Number of jets to save per event")
     parser.add_option("--boxn", type=int, default=3, help="Number of the black box to parse. If RD is True, then this flag has no effect")
     parser.add_option("--RD", action="store_true", default=False, help="Use the RD dataset")
+    parser.add_option("--BBk", action="store_true", default=False, help="Use the BB with key dataset")
     parser.add_option("--dir", type="string", default="../samples/", help="Folder containing the input files")
     parser.add_option("--out", type="string", default="../h5/", help="Folder to save output files")
 
@@ -167,6 +168,7 @@ if __name__=='__main__':
 
 
     RD = flags.RD 
+    BBk = flags.BBk
     samples_path = flags.dir
     save_path = flags.out
 
@@ -174,10 +176,12 @@ if __name__=='__main__':
 
     if RD:
         sample = 'events_anomalydetection.h5'
+    
+    elif BBk:
+        sample = 'BlackBox{}_with_key.h5'.format(flags.boxn)
+
     else:
         sample = 'events_LHCO2020_BlackBox{}.h5'.format(flags.boxn)
-
-
 
     # data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
     # data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 400001,stop=550000)
@@ -192,6 +196,11 @@ if __name__=='__main__':
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_RD".format(NVOXELS),R=1.0,RD=True)
         clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_RD".format(NVOXELS),R=1.0,RD=True)
         clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_RD".format(NVOXELS),R=1.0,RD=True)
+    
+    elif BBk:
+        data_all =  pd.read_hdf(os.path.join(samples_path,sample))
+        clustering_anomaly(data_all.to_numpy(),NPARTS,NVOXELS,name = "all_{}v_BBk".format(NVOXELS),R=1.0,RD=True)
+
     else:
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_B{}".format(NVOXELS,boxn),R=1.0)
         clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_B{}".format(NVOXELS,boxn),R=1.0)
