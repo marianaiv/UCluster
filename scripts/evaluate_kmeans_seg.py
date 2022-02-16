@@ -37,7 +37,7 @@ parser.add_argument('--name', default="", help='name of the output file')
 parser.add_argument('--h5_folder', default="../h5/", help='folder to store output files')
 parser.add_argument('--box', type=int, default=1, help='Black Box number, ignored if RD dataset [default: 1]')
 parser.add_argument('--RD',  default=False, action='store_true',help='Use RD data set [default: False')
-parser.add_option("--BBk", default=False, action="store_true", help="Use the BB with key dataset")
+parser.add_argument("--BBk", default=False, action="store_true", help="Use the BB with key dataset")
 parser.add_argument('--full_train',  default=False, action='store_true',help='Use full training [default: False')
 
 FLAGS = parser.parse_args()
