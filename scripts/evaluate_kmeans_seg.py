@@ -167,7 +167,7 @@ def eval_one_epoch(sess,ops):
     for fn in range(len(EVALUATE_FILES)):
         current_file = os.path.join(H5_DIR,EVALUATE_FILES[eval_idxs[fn]])        
         if RD or BBk:
-            current_data,  current_cluster,current_label = provider.load_h5_data_label_seg(current_file)
+            current_data, current_cluster, current_label = provider.load_h5_data_label_seg(current_file)
         else:
             current_data, current_label = provider.load_h5(current_file,'seg')
 
@@ -216,6 +216,7 @@ def eval_one_epoch(sess,ops):
             if len(y_assign)==0:                
                 if RD or BBk:
                     y_val=batch_cluster
+                    y_dist=dist[:, i]
                 y_assign=cluster_assign
                 y_pool=np.squeeze(max_pool)
             else:
@@ -224,6 +225,7 @@ def eval_one_epoch(sess,ops):
             
                 if RD or BBk:
                     y_val=np.concatenate((y_val,batch_cluster),axis=0)
+                    y_dist=np.concatenate((y_dist,dist[:, i]),axis=0)
                 
                 
 
@@ -238,6 +240,7 @@ def eval_one_epoch(sess,ops):
     with h5py.File(os.path.join(H5_OUT,'{0}.h5'.format(FLAGS.name)), "w") as fh5:        
         if RD or BBk:
             dset = fh5.create_dataset("label", data=y_val)
+            dset = fh5.create_dataset("distances", data=y_dist)
         dset = fh5.create_dataset("pid", data=y_assign)
         dset = fh5.create_dataset("max_pool", data=y_pool)
         dset = fh5.create_dataset("global", data=y_glob)
