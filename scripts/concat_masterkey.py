@@ -6,8 +6,8 @@ from benchtools.src.datatools import ascii_column
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--boxn", type=int, default=1, help="Number of the black box to parse [default: 1]")
-parser.add_argument('--dir', type="string", default="../../", help='Path of h5 files')
-parser.add_argument("--out", type="string", default="../h5/", help="Folder to save output files")
+parser.add_argument('--dir', type=str, default="../../", help='Path of h5 files')
+parser.add_argument("--out", type=str, default="../h5/", help="Folder to save output files")
 parser.add_argument("--chunksize", type=int, default=100000, help="Number of the black box to parse [default: 100,000]")
 parser.add_argument("--datasize", type=int, default=1000000, help="Number of the black box to parse [default: 1,000,000]")
 
