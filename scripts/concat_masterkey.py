@@ -26,13 +26,15 @@ start = 0
 chunksize = flags.chunksize
 dataset_size = flags.datasize
 
-# doing it with a loop
-while start is not dataset_size:
-    print(start)
-    # Reading the files for the data and the labels
-    df_bb = pd.read_hdf(os.path.join(samples_path,sample), start=start, stop=start+chunksize)
-    df_key = ascii_column(os.path.join(samples_path,key))
+# Reading the label
+df_key = ascii_column(os.path.join(samples_path,key))
 
+# doing it with a loop
+while start != dataset_size:
+    print(start)
+    # Reading the files for the data
+    df_bb = pd.read_hdf(os.path.join(samples_path,sample), start=start, stop=start+chunksize)
+    
     # Joining the df's
     bb_with_key = df_bb.assign(label=pd.Series(df_key.iloc[start:start+chunksize,0]).values)
     bb_with_key.rename(columns={'label': 2100}, inplace=True)
