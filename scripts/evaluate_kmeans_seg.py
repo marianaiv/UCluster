@@ -37,6 +37,7 @@ parser.add_argument('--name', default="", help='name of the output file')
 parser.add_argument('--h5_folder', default="../h5/", help='folder to store output files')
 parser.add_argument('--box', type=int, default=1, help='Black Box number, ignored if RD dataset [default: 1]')
 parser.add_argument('--RD',  default=False, action='store_true',help='Use RD data set [default: False')
+parser.add_option("--BBk", default=False, action="store_true", help="Use the BB with key dataset")
 parser.add_argument('--full_train',  default=False, action='store_true',help='Use full training [default: False')
 
 FLAGS = parser.parse_args()
@@ -48,6 +49,7 @@ H5_OUT = FLAGS.h5_folder
 if not os.path.exists(H5_OUT): os.mkdir(H5_OUT)  
 FULL_TRAINING = FLAGS.full_train
 RD = FLAGS.RD
+BBk = FLAGS.BBk
 # MAIN SCRIPT
 NUM_POINT = FLAGS.num_point
 BATCH_SIZE = FLAGS.batch
@@ -93,13 +95,15 @@ def cluster_acc(y_true, y_pred):
 
 if RD:
     EVALUATE_FILES = provider.getDataFiles(os.path.join(H5_DIR, 'evaluate_files_RD.txt')) # Need to create those
+elif BBk:
+    EVALUATE_FILES = provider.getDataFiles(os.path.join(H5_DIR, 'evaluate_files_bbk{}.txt'.format(FLAGS.box))) 
 else:
     EVALUATE_FILES = provider.getDataFiles(os.path.join(H5_DIR, 'evaluate_files_b{}.txt'.format(FLAGS.box))) 
 
   
 def eval():
     with tf.Graph().as_default():
-        with tf.device('/gpu:'+str(FLAGS.gpu)):
+        with tf.device('/cpu:'+str(FLAGS.gpu)):
             pointclouds_pl,  labels_pl, global_pl = MODEL.placeholder_inputs(BATCH_SIZE, NUM_POINT,NFEATURES,NUM_GLOB) 
             batch = tf.Variable(0, trainable=False)
             alpha = tf.placeholder(tf.float32, shape=())
@@ -117,7 +121,7 @@ def eval():
 
     
         config = tf.ConfigProto()
-        config.gpu_options.allow_growth = True
+        #config.gpu_options.allow_growth = True
         config.allow_soft_placement = True
         #config.log_device_placement = False
         sess = tf.Session(config=config)
@@ -162,7 +166,7 @@ def eval_one_epoch(sess,ops):
 
     for fn in range(len(EVALUATE_FILES)):
         current_file = os.path.join(H5_DIR,EVALUATE_FILES[eval_idxs[fn]])        
-        if RD:
+        if RD or BBk:
             current_data,  current_cluster,current_label = provider.load_h5_data_label_seg(current_file)
         else:
             current_data, current_label = provider.load_h5(current_file,'seg')
@@ -199,18 +203,18 @@ def eval_one_epoch(sess,ops):
                                          ops['max_pool']],feed_dict=feed_dict)
 
             cluster_assign = np.zeros((cur_batch_size), dtype=int)
-            if RD:
+            if RD or BBk:
                 batch_cluster = current_cluster[start_idx:end_idx]
 
 
             for i in range(cur_batch_size):
                 index_closest_cluster = np.argmin(dist[:, i])
                 cluster_assign[i] = index_closest_cluster
-                if RD:
+                if RD or BBk:
                     acc+=cluster_acc(batch_cluster,cluster_assign)
                     
             if len(y_assign)==0:                
-                if RD:
+                if RD or BBk:
                     y_val=batch_cluster
                 y_assign=cluster_assign
                 y_pool=np.squeeze(max_pool)
@@ -218,7 +222,7 @@ def eval_one_epoch(sess,ops):
                 y_assign=np.concatenate((y_assign,cluster_assign),axis=0)
                 y_pool=np.concatenate((y_pool,np.squeeze(max_pool)),axis=0)
             
-                if RD:
+                if RD or BBk:
                     y_val=np.concatenate((y_val,batch_cluster),axis=0)
                 
                 
@@ -232,7 +236,7 @@ def eval_one_epoch(sess,ops):
             
 
     with h5py.File(os.path.join(H5_OUT,'{0}.h5'.format(FLAGS.name)), "w") as fh5:        
-        if RD:
+        if RD or BBk:
             dset = fh5.create_dataset("label", data=y_val)
         dset = fh5.create_dataset("pid", data=y_assign)
         dset = fh5.create_dataset("max_pool", data=y_pool)
