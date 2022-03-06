@@ -49,7 +49,7 @@ for ii in range(int(N_EVENTS/CHUNKSIZE)):
     else:
         # Append new data to it
         print(f['bb'].shape[0] , bb_array.shape[0])
-        f['bb'].resize((f['bb'].shape[0] + bb_array.shape[0]), axis=1)
+        f['bb'].resize((f['bb'].shape[0] + bb_array.shape[0]), axis=0)
         f['bb'][-bb_array.shape[0]:] = bb_array
         
     start+=CHUNKSIZE 
