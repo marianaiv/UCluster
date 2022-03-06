@@ -169,7 +169,7 @@ if __name__=='__main__':
 
     RD = flags.RD 
     BBk = flags.BBk
-    samples_path = flags.dir
+    samples_path = flags.dir  
     save_path = flags.out
 
         
@@ -183,16 +183,16 @@ if __name__=='__main__':
     else:
         sample = 'events_LHCO2020_BlackBox{}.h5'.format(flags.boxn)
 
+    if not BBk:
+        # data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
+        # data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 400001,stop=550000)
+        # data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 650001,stop=990001)
 
-    # data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
-    # data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 400001,stop=550000)
-    # data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 650001,stop=990001)
-
-
-    data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=4000)
-    data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 4000,stop=5500)
-    data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 6500,stop=9900)
-    print("Loaded data set")
+        
+        data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=4000)
+        data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 4000,stop=5500)
+        data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 6500,stop=9900)
+        print("Loaded data set")
 
     if RD:
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_RD".format(NVOXELS),R=1.0,RD=True)
@@ -200,7 +200,7 @@ if __name__=='__main__':
         clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_RD".format(NVOXELS),R=1.0,RD=True)
     
     elif BBk:
-        data_all =  pd.read_hdf(os.path.join(samples_path,sample))
+        data_all = pd.DataFrame(np.array(h5py.File(os.path.join(samples_path,sample))['bb']))
         clustering_anomaly(data_all.to_numpy(),NPARTS,NVOXELS,name = "all_{}v_BBk".format(NVOXELS),R=1.0,RD=True)
 
     else:
