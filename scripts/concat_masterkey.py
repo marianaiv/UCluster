@@ -33,7 +33,7 @@ df_key = ascii_column(os.path.join(SAMPLES_PATH,key))
 f = h5py.File(os.path.join(SAVE_PATH,'BlackBox{}_with_key.h5'.format(BB)), 'a')
 
 # doing it with a loop
-for ii in range(N_EVENTS/CHUNKSIZE):
+for ii in range(int(N_EVENTS/CHUNKSIZE)):
     print(start)
     # Reading the files for the data
     df_bb = pd.read_hdf(os.path.join(SAMPLES_PATH,sample), start=start, stop=start+CHUNKSIZE)
