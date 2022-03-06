@@ -30,7 +30,7 @@ N_EVENTS = flags.datasize
 # Reading the label
 df_key = ascii_column(os.path.join(SAMPLES_PATH,key))
 
-f = h5py.File(os.path.join(SAVE_PATH,'BlackBox{}_with_key.h5'.format(bb)), 'a')
+f = h5py.File(os.path.join(SAVE_PATH,'BlackBox{}_with_key.h5'.format(BB)), 'a')
 
 # doing it with a loop
 for ii in range(N_EVENTS/CHUNKSIZE):
