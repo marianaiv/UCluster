@@ -153,7 +153,7 @@ if __name__=='__main__':
     parser.add_option("--nparts", type=int, default=100, help="Number of particles per event")
     parser.add_option("--nvoxels", type=int, default=20, help="Number of mass divisions to use")
     parser.add_option("--njets", type=int, default=2, help="Number of jets to save per event")
-    parser.add_option("--boxn", type=int, default=3, help="Number of the black box to parse. If RD is True, then this flag has no effect")
+    parser.add_option("--boxn", type=int, default=1, help="Number of the black box to parse. If RD is True, then this flag has no effect")
     parser.add_option("--RD", action="store_true", default=False, help="Use the RD dataset")
     parser.add_option("--BBk", action="store_true", default=False, help="Use the BB with key dataset")
     parser.add_option("--dir", type="string", default="../samples/", help="Folder containing the input files")
