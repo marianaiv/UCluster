@@ -29,6 +29,7 @@ dataset_size = flags.datasize
 # Reading the label
 df_key = ascii_column(os.path.join(samples_path,key))
 
+list_df = []
 # doing it with a loop
 while start != dataset_size:
     print(start)
@@ -38,9 +39,12 @@ while start != dataset_size:
     bb_with_key = df_bb.assign(label=pd.Series(df_key.iloc[start:start+chunksize,0]).values)
     bb_with_key.rename(columns={'label': 2100}, inplace=True)
 
-    # Saving as h5
-    bb_with_key.to_hdf(os.path.join(save_path,'BlackBox{}_with_key.h5'.format(bb)), key='bb') 
+    list_df.append(bb_with_key)
     
     start+=chunksize 
+
+# Saving as h5
+df_final = pd.concat(list_df, ignore_index=True)
+df_final.to_hdf(os.path.join(save_path,'BlackBox{}_with_key.h5'.format(bb)), key='bb') 
 
 print('Succesfully joined')
