@@ -44,7 +44,7 @@ for ii in range(int(N_EVENTS/CHUNKSIZE)):
     bb_array = bb_with_key.to_numpy()
 
     if ii == 0:
-        f.create_dataset('bb', data=bb_array, compression="gzip", chunks=True, maxshape=(None, 700))
+        f.create_dataset('bb', data=bb_array, compression="gzip", chunks=True, maxshape=(None, None))
         print(f['bb'].shape)
     else:
         # Append new data to it
