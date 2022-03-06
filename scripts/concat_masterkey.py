@@ -47,7 +47,7 @@ for ii in range(int(N_EVENTS/CHUNKSIZE)):
         f.create_dataset('bb', data=bb_array, compression="gzip", chunks=True, maxshape=(None, 700))
     else:
         # Append new data to it
-        f['bb'].resize((f['bb'].shape[0] + bb_array.shape[0]), axis=0)
+        f['bb'].resize((f['bb'].shape[0] + bb_array.shape[0]), axis=1)
         f['bb'][-bb_array.shape[0]:] = bb_array
         
     start+=CHUNKSIZE 
