@@ -198,7 +198,7 @@ if __name__=='__main__':
         data_test = pd.concat([data_test, df_key.iloc[400001:550000]], axis=1)
         data_eval = pd.concat([data_test, df_key.loc[550001:1000000]], axis=1)
 
-        orint('train: {}, test:{}, eval: {}'.format(data_train.shape, data_test.shape, data_eval.shape))
+        print('train: {}, test:{}, eval: {}'.format(data_train.shape, data_test.shape, data_eval.shape))
 
     else:
         data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
