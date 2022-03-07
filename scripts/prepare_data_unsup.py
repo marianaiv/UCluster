@@ -172,8 +172,7 @@ if __name__=='__main__':
     BBk = flags.BBk
     samples_path = flags.dir  
     save_path = flags.out
-
-        
+    
 
     if RD:
         sample = 'events_anomalydetection.h5'
@@ -185,6 +184,8 @@ if __name__=='__main__':
     else:
         sample = 'events_LHCO2020_BlackBox{}.h5'.format(flags.boxn)
 
+
+
     if BBk:
         df_key = ascii_column(os.path.join(samples_path,sample_key))
 
@@ -195,8 +196,6 @@ if __name__=='__main__':
         data_train = pd.concat([data_train, df_key.iloc[:400000]], axis=1)
         data_test = pd.concat([data_test, df_key.iloc[400001:550000]], axis=1)
         data_test = pd.concat([data_test, df_key.loc[550001:]], axis=1)
-
-
 
     else:
         data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
@@ -216,9 +215,9 @@ if __name__=='__main__':
         clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_RD".format(NVOXELS),R=1.0,RD=True)
     
     elif BBk:
-        clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0)
-        clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0)
-        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0)
+        clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0,RD=True)
+        clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0,RD=True)
+        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0,RD=True)
     else:
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_B{}".format(NVOXELS,flags.boxn),R=1.0)
         clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_B{}".format(NVOXELS,flags.boxn),R=1.0)
