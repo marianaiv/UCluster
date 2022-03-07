@@ -58,6 +58,6 @@ for ii in range(len(list_df)-1):
 
 # Saving as h5
 #final_df = pd.concat(list_df, ignore_index=True)
-final_df.to_hdf(os.path.join(SAVE_PATH,'BlackBox{}_with_key.h5'.format(bb)), key='bb')
+final_df.to_hdf(os.path.join(SAVE_PATH,'BlackBox{}_with_key.h5'.format(BB)), key='bb')
 
 print('Succesfully joined')
