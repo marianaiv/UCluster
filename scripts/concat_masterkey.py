@@ -44,6 +44,8 @@ while start != N_EVENTS:
     
     list_df.append(bb_with_key)
 
+    start += CHUNKSIZE
+
 
 # looping to concat with each other
 for ii in range(len(list_df)-1):
