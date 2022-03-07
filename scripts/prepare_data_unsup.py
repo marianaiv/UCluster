@@ -191,11 +191,11 @@ if __name__=='__main__':
 
         data_train = pd.read_hdf(os.path.join(samples_path,sample_box),stop=400000)
         data_test =  pd.read_hdf(os.path.join(samples_path,sample_box),start = 400001,stop=550000)
-        data_eval =  pd.read_hdf(os.path.join(samples_path,sample_box),start = 550001)
+        data_eval =  pd.read_hdf(os.path.join(samples_path,sample_box),start = 550001, stop=1000000)
         
         data_train = pd.concat([data_train, df_key.iloc[:400000]], axis=1)
         data_test = pd.concat([data_test, df_key.iloc[400001:550000]], axis=1)
-        data_eval = pd.concat([data_test, df_key.loc[550001:]], axis=1)
+        data_eval = pd.concat([data_test, df_key.loc[550001:1000000]], axis=1)
 
     else:
         data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
