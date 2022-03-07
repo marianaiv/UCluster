@@ -5,6 +5,7 @@ import numpy as np
 import random
 import pyjet as fj
 from optparse import OptionParser
+from benchtools.src.datatools import ascii_column
 
 np.random.seed(10)
 
@@ -178,21 +179,36 @@ if __name__=='__main__':
         sample = 'events_anomalydetection.h5'
     
     elif BBk:
-        sample = 'BlackBox{}_with_key.h5'.format(flags.boxn)
+        sample_box = 'events_LHCO2020_BlackBox{}.h5'.format(flags.boxn)
+        sample_key = 'events_LHCO2020_BlackBox{}.masterkey'.format(flags.boxn)
 
     else:
         sample = 'events_LHCO2020_BlackBox{}.h5'.format(flags.boxn)
 
-    if not BBk:
-        # data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
-        # data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 400001,stop=550000)
-        # data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 650001,stop=990001)
+    if BBk:
+        df_key = ascii_column(os.path.join(samples_path,sample_key))
+
+        data_train = pd.read_hdf(os.path.join(samples_path,sample_box),stop=400000)
+        data_test =  pd.read_hdf(os.path.join(samples_path,sample_box),start = 400001,stop=550000)
+        data_eval =  pd.read_hdf(os.path.join(samples_path,sample_box),start = 550001)
+        
+        data_train = pd.concat([data_train, df_key.iloc[:400000]], axis=1)
+        data_test = pd.concat([data_test, df_key.iloc[400001:550000]], axis=1)
+        data_test = pd.concat([data_test, df_key.loc[550001:]], axis=1)
+
+
+
+    else:
+        data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
+        data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 400001,stop=550000)
+        data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 550001,stop=1000000)
 
         
-        data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=4000)
-        data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 4000,stop=5500)
-        data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 6500,stop=9900)
-        print("Loaded data set")
+        #data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=4000)
+        #data_test =  pd.read_hdf(os.path.join(samples_path,sample),start = 4000,stop=5500)
+        #data_eval =  pd.read_hdf(os.path.join(samples_path,sample),start = 6500,stop=9900)
+
+    print("Loaded data set")
 
     if RD:
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_RD".format(NVOXELS),R=1.0,RD=True)
@@ -200,9 +216,9 @@ if __name__=='__main__':
         clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_RD".format(NVOXELS),R=1.0,RD=True)
     
     elif BBk:
-        data_all = pd.DataFrame(np.array(h5py.File(os.path.join(samples_path,sample))['bb']))
-        clustering_anomaly(data_all.to_numpy(),NPARTS,NVOXELS,name = "all_{}v_BBk".format(NVOXELS),R=1.0,RD=True)
-
+        clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_BB{}k".format(NVOXELS,boxn),R=1.0)
+        clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_BB{}k".format(NVOXELS,boxn),R=1.0)
+        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_BB{}k".format(NVOXELS,boxn),R=1.0)
     else:
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_B{}".format(NVOXELS,boxn),R=1.0)
         clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_B{}".format(NVOXELS,boxn),R=1.0)
