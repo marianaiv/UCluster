@@ -216,11 +216,11 @@ if __name__=='__main__':
         clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_RD".format(NVOXELS),R=1.0,RD=True)
     
     elif BBk:
-        clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_BB{}k".format(NVOXELS,boxn),R=1.0)
-        clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_BB{}k".format(NVOXELS,boxn),R=1.0)
-        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_BB{}k".format(NVOXELS,boxn),R=1.0)
+        clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0)
+        clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0)
+        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0)
     else:
-        clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_B{}".format(NVOXELS,boxn),R=1.0)
-        clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_B{}".format(NVOXELS,boxn),R=1.0)
-        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_B{}".format(NVOXELS,boxn),R=1.0)
+        clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_B{}".format(NVOXELS,flags.boxn),R=1.0)
+        clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_B{}".format(NVOXELS,flags.boxn),R=1.0)
+        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_B{}".format(NVOXELS,flags.boxn),R=1.0)
 
