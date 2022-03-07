@@ -192,10 +192,13 @@ if __name__=='__main__':
         data_train = pd.read_hdf(os.path.join(samples_path,sample_box),stop=400000)
         data_test =  pd.read_hdf(os.path.join(samples_path,sample_box),start = 400001,stop=550000)
         data_eval =  pd.read_hdf(os.path.join(samples_path,sample_box),start = 550001, stop=1000000)
+
         
         data_train = pd.concat([data_train, df_key.iloc[:400000]], axis=1)
         data_test = pd.concat([data_test, df_key.iloc[400001:550000]], axis=1)
         data_eval = pd.concat([data_test, df_key.loc[550001:1000000]], axis=1)
+
+        orint('train: {}, test:{}, eval: {}'.format(data_train.shape, data_test.shape, data_eval.shape))
 
     else:
         data_train = pd.read_hdf(os.path.join(samples_path,sample),start = 0,stop=400000)
@@ -215,9 +218,10 @@ if __name__=='__main__':
         clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_RD".format(NVOXELS),R=1.0,RD=True)
     
     elif BBk:
+        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0,RD=True)
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0,RD=True)
         clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0,RD=True)
-        clustering_anomaly(data_eval.to_numpy(),NPARTS,NVOXELS,name = "eval_{}v_BB{}k".format(NVOXELS,flags.boxn),R=1.0,RD=True)
+        
     else:
         clustering_anomaly(data_train.to_numpy(),NPARTS,NVOXELS,name = "train_{}v_B{}".format(NVOXELS,flags.boxn),R=1.0)
         clustering_anomaly(data_test.to_numpy(),NPARTS,NVOXELS,name = "test_{}v_B{}".format(NVOXELS,flags.boxn),R=1.0)
