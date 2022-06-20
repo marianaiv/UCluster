@@ -27,7 +27,6 @@ dependencies:
   - pip:
     - absl-py==1.0.0
     - astor==0.8.1
-    - benchtools==0.0.1
     - cached-property==1.5.2
     - dataclasses==0.8
     - gast==0.5.3
